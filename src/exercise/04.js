@@ -5,7 +5,14 @@ import * as React from 'react'
 
 function Board() {
   // 🐨 squares is the state for this component. Add useState for squares
-  const [squares, setSquares] = React.useState(Array(9).fill(null))
+  const [squares, setSquares] = React.useState(
+    () =>
+      JSON.parse(window.localStorage.getItem('squares')) || Array(9).fill(null),
+  )
+
+  React.useEffect(() => {
+    window.localStorage.setItem('squares', JSON.stringify(squares))
+  }, [squares])
 
   const nextValue = calculateNextValue(squares)
   const winner = calculateWinner(squares)
@@ -58,7 +65,7 @@ function Board() {
   return (
     <div>
       {/* 🐨 put the status in the div below */}
-      <div className="status">{status}}</div>
+      <div className="status">{status}</div>
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}
